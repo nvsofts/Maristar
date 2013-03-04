@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>{8a5be090-4789-40f3-9ae5-51b11ed90cf0}</em:id>
+    <em:type>2</em:type>
+    <em:name>Maristar</em:name>
+    <em:version>1.1</em:version>
+    <em:description>A Twitter client for Firefox</em:description>
+    <em:creator>NV</em:creator>
+    <em:homepageURL>http://maristar.j-ynv.net/</em:homepageURL>
+    <em:updateURL>https://ss1.xrea.com/www.ns-koubou.com/maristar/update.rdf</em:updateURL>
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>4.0</em:minVersion>
+        <em:maxVersion>999.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+  </Description>
+
+</RDF>

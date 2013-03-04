@@ -1,0 +1,74 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Maristar / OAuth in browser</title>
+<style type="text/css"><!--
+body { background-color: #fff; font-size: 90%; }
+h1 { border-bottom: solid 2px red; }
+--></style>
+<script type="text/javascript" src="sha1.js"></script>
+<script type="text/javascript" src="oauth.js"></script>
+<script type="text/javascript" src="httprequest.js"></script>
+<script type="text/javascript" src="config.js"></script>
+<script>
+var accessor = {consumerKey: "yrljmPkUQQWYbGpR54uGLQ", consumerSecret: "zhhzG3hmbRl51MDEH00wLwEn9Lt4amiILIXlMW3Nc0"};
+
+function signin() {
+	HTTPRequest.httpPostOAuth("https://api.twitter.com/oauth/request_token", null, accessor, {}, function (xhr, e) {
+		res = xhr.responseText;
+		if (res.match(/^oauth_token=([^&]+)&oauth_token_secret=([^&]+)/)) {
+			accessor.token = RegExp.$1;
+			accessor.tokenSecret = RegExp.$2;
+			window.open('https://api.twitter.com/oauth/authorize?oauth_token=' + RegExp.$1);
+		}else{
+			alert('Authentication Failed.');
+			location.reload(true);
+		}
+	}, null);
+}
+
+function get_token(form) {
+	form.btn.disabled = true;
+	
+	HTTPRequest.httpPostOAuth("https://api.twitter.com/oauth/access_token", null, accessor, {'oauth_verifier': form.oauth_pin.value}, function (xhr, e) {
+		if (xhr.status == 200) {
+			res = xhr.responseText;
+			if (res.match(/^oauth_token=([^&]+)&oauth_token_secret=([^&]+)/)) {
+				writeCookie('access_token', RegExp.$1);
+				writeCookie('access_secret', RegExp.$2);
+				location.replace('maristar.html');
+			}
+		}else{
+			alert('Authentication Failed.');
+			location.reload(true);
+		}
+	}, null);
+	
+	return false;
+}
+</script>
+</head>
+<body>
+<h1><img alt="Maristar" src="images/maristar_large.png" width="48" height="48">Maristar / OAuth</h1>
+
+<table>
+<tr><th>Step 1:</th><td>Please click "Sign in with Twitter" button.</td>
+<tr><td></td><td>"Sign in with Twitter"ボタンを押して下さい。</td>
+</table>
+
+<p>
+<input type="button" onclick="this.disabled = true; signin();" value="Sign in with Twitter">
+</p>
+
+<table>
+<tr><th>Step 2:</th><td>Copy the PIN above, paste it into the field below, and click "Authorize".</td>
+<tr><td></td><td>表示されたPINをコピーして下のボックスにペーストし、"Authorize"ボタンを押して下さい。</td>
+</table>
+
+<form action="#" onsubmit="return get_token(this)">
+	<input name="oauth_pin" type="text" size="15">
+	<input name="btn" type="submit" value="Authorize">
+</form>
+
+</body>
+</html>
